@@ -6,7 +6,7 @@ def decorateText(text):
     # nefunguje v idlu :(
     input(text)
           
-def playerDeath(): # nahodna zprava o smrti
+def playerDeath(): # nahodna zprava o smrti, momentalne moc nevyuzita, patch vyjde v dohledne dobe
     deathMessages = ["A sword impales you. You died so early?", "Announcer: And a fatal hit! The human is defeated!", "An arrow pierces your skull, you wonder if it was an enemy, or a bystander.", "Weakling! he taunts you. No match for me!"]
     decorateText(deathMessages[random.randint(0,3)])
     decorateText("As the world fades around you, you see a face entering the arena.")
@@ -25,12 +25,12 @@ def startStory():   # prvni smrt? spis dialog a jestli je hrac ready
         decorateText("Whatever! Welcome!")
         time.sleep(2)
 
-def selectHeroName():
+def selectHeroName(): # proste se zepta hrace na jmeno
     playerName = input("Just wondering, what is your name? ")
     print(playerName + "... cool!")
     return playerName
 
-def selectHeroType():
+def selectHeroType():  # zepta se na typ hrace, mag je i podle dialogu momentalne nenacodenej
     global hero
     isNotHeroChosen = True
     while isNotHeroChosen:
@@ -48,26 +48,26 @@ def selectHeroType():
     decorateText("... you already know all of them.")
     decorateText("There are no rules.")
 
-def getRandomEnemyName():
+def getRandomEnemyName(): # z listu vybere nahodne jmeno nepritele, jmeno jde pak zjistit pomoci akce Check
     enemyNames = ["Josef", "Gragas", "Blitzcrank", "Ash", "Doom", "Gangplank", "Halofungaming", "Savathun", "Bowser", "Void", "'merica", "Wise Old Man", "Aatrox", "Tryndamere"]
     return enemyNames[random.randint(0,13)]
 
-def getRandomEnemyHP():
+def getRandomEnemyHP(): # vygeberuje nahodne nepratelske HP
     return(random.randint(110, 270))
 
 def battle(heroName, heroType, enemyName, getEnemyHP): # bez objektoveho programovani, trochu prasarna
     isEnemyDead = False
     isPlayerDead = False
-    heroHP = random.randint(100,150)
+    heroHP = random.randint(100,150) # nahodne hp
     enemyHP = getEnemyHP
-    while isEnemyDead == False and isPlayerDead == False:
+    while isEnemyDead == False and isPlayerDead == False: # cykli do doby, kdy jeden z bojovniku neumre
         print("Choose your move:")
-        playerMove = input("Attack / Super / Heal / Check [A/S/H/C] ")
-        if playerMove == "A":
+        playerMove = input("Attack / Super / Heal / Check [A/S/H/C] ") # input
+        if playerMove == "A": # mini utok hrace
             attackText = ["You bonk him. The ding could be heard anywhere.", "You slap him. Ow.", "You dropkick him. He flew a bit.", "Spin to win is the strat, amiright?", "You swing your fists and manage to hit!"]
             decorateText(attackText[random.randint(0, 4)])
             enemyHP -= random.randint(10, 20)
-        elif playerMove == "S":
+        elif playerMove == "S": # mega utok hrace
             if heroHP >= 20:
                 decorateText("You concentrate.")
                 decorateText("... you don't feel angry enough.")
@@ -99,11 +99,11 @@ def battle(heroName, heroType, enemyName, getEnemyHP): # bez objektoveho program
                 decorateText("Poor guy you think.")
                 decorateText("He looks really. really. REALLY not good.")
                 enemyHP -= random.randint(60, 100)
-        elif playerMove == "H":
+        elif playerMove == "H": # heal
             decorateText("You concentrate on mending your wounds.")
             decorateText("You feel a little better.")
             heroHP += random.randint(20, 30)
-        elif playerMove == "C":
+        elif playerMove == "C": # check, zjisti jmeno protivnika, jak je na tom se zivoty, v pripade, ze je nepritel mrtev, potvrdi smrt
             decorateText("What was his name?")
             decorateText(enemyName)
             decorateText("something like that...")
@@ -129,11 +129,11 @@ def battle(heroName, heroType, enemyName, getEnemyHP): # bez objektoveho program
                 isEnemyDead = True
                             
         enemyMove = random.randint(1,4)
-        if enemyMove == 1: # attack
+        if enemyMove == 1: # mini utok nepritele
             enemyAttackText = ["He pierces your skin with is dagger.", "He bonks you with his hammer.", "He shoots you with his bow.", "He shouts angrily and slaps you. Damn.", "He insults your family, emotional damage!"]
             decorateText(enemyAttackText[random.randint(0, 4)])
             heroHP -= random.randint(10, 20)
-        elif enemyMove == 2: # super
+        elif enemyMove == 2: # mega utok nepritele
             if enemyHP > 20:
                 decorateText("He's just standing there. Menacingly.")
             else:
@@ -151,15 +151,18 @@ def battle(heroName, heroType, enemyName, getEnemyHP): # bez objektoveho program
                 decorateText("Your entire body hurts. But you are not dead yet.")
                 decorateText("...or are you?")
                 playerHP -= random.randint(60,110)
-        elif enemyMove == 3: # heal
+        elif enemyMove == 3: # heal protivnika
             decorateText("He starts bandaging himself.")
             decorateText("You could stop him.")
             decorateText("But that's not fun.")
             enemyHP += random.randint(20,30)
-        else:
+        else: # i kdyz elsem, checkne, rekne vase jmeno, v pripade, ze jste mrtev potvrdi kill
             decorateText("He's looking at you.")
             decorateText("He shouts your name.")
-            decorateText(heroName + ", more like coward!")
+            decorateText(heroName + ", more like...")
+            decorateText("He pauses for a second, thinking of an adequate roast.")
+            roastList = ["Bumbo!", "coward!", "Stoopid!", "He can't think of anything. ", "Legend. He admires you?", "4chan user. That hurt -3hp"]
+            decorateText(roastList[random.randint(0, 5)])
             if heroHP > 100:
                 decorateText("You look scratchless.")
             elif heroHP > 80:
@@ -193,7 +196,7 @@ def battle(heroName, heroType, enemyName, getEnemyHP): # bez objektoveho program
                 
 playerName = None
 playerType = None
-def mainLoop():
+def mainLoop(): # drivery
     playTheGame = True
     startStory()
     playerName = selectHeroName()
@@ -206,4 +209,4 @@ def mainLoop():
             decorateText("Very well then.")
             battle(playerName, playerType, getRandomEnemyName(), getRandomEnemyHP())
 
-mainLoop()
+mainLoop() # starter

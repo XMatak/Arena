@@ -23,7 +23,6 @@ def startStory():   # prvni smrt? spis dialog a jestli je hrac ready
         playerDeath()
     else:
         decorateText("Whatever! Welcome!")
-        time.sleep(2)
 
 def selectHeroName(): # proste se zepta hrace na jmeno
     playerName = input("Just wondering, what is your name? ")
